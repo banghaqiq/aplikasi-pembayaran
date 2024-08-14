@@ -1,0 +1,301 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url "berandabendahara" %}">Beranda</a></li>
+          <li class="breadcrumb-item">Halaman</li>
+          <li class="breadcrumb-item active">{{nama}}</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+ <section class="section">
+           <!-- /.card-header -->
+    <div class="row select-wrapper">
+        <form action="#" method="post" id="simpansettingpembayaran" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="col-md-12 col-12 selects-contant">
+            <div class="row">
+                
+                <div class="col-md-6 col-6 selects-contant">
+                    <div class="card card-statistics">
+                        <div class="card-header">
+                            <div class="card-heading">
+                                <h4 class="card-title">Pilih Bulan</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-0">
+                                <select class="js-basic-single form-control" name="bulan" id="bulan">
+                                  
+                                        <option value="0" selected>--- Pilih Bulan ---</option>
+                                        <option value="Januari">Januari</option>
+                                        <option value="Februari">Februari</option>
+                                        <option value="Maret">Maret</option>
+                                        <option value="April">April</option>
+                                        <option value="Mei">Mei</option>
+                                        <option value="Juni">Juni</option>
+                                        <option value="Juli">Juli</option>
+                                        <option value="Agustus">Agustus</option>
+                                        <option value="September">September</option>
+                                        <option value="Oktober">Oktober</option>
+                                        <option value="November">November</option>
+                                        <option value="Desember">Desember</option>
+                                       
+                                   
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-6 selects-contant">
+                    <div class="card card-statistics Multi-sel">
+                        <div class="card-header">
+                            <div class="card-heading">
+                                <h4 class="card-title">Pilih Tahun Pelajaran</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-0">
+                                <select class="js-basic-single form-control" name="tahun" id="tahun">
+                                    <option value="0" selected>--- Pilih Tahun Pelajaran ---</option>
+                                    {% for th in tahun %}
+                                    <option value="{{th.nama}}">{{th.nama}}</option>
+                                   {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-12 selects-contant-boots">
+                    <div class="card card-statistics">
+                        <div class="card-header">
+                            <div class="card-heading">
+                                <h4 class="card-title">Pilih Data Santri </h4>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="datatable-wrapper table-responsive">
+                              <div class="row mb-3">
+                                <div class="col-md-6">
+                                  <label for="filterWilayah">Filter Wilayah:</label>
+                                  <select id="filterWilayah" class="form-control">
+                                    <option value="0" selected>--- Pilih Wilayah ---</option>
+                                    {% for row in wilayah %}
+                                    <option value="{{row.nama_wilayah}}">{{row.nama_wilayah}}</option>
+                                   {% endfor %}
+                                   ->
+                                  </select>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="search">Cari:</label>
+                                  <input type="text" id="search" class="form-control" placeholder="Masukkan kata kunci">
+                                </div>
+                              </div>
+                          
+                              <table id="setting" class="table table-bordered table-striped">
+                                <thead>
+                                  <tr>
+                                    <th>
+                                      <input type="checkbox" class="checkAll" name="checkAll" /> Pilih Semua
+                                    </th>
+                                    <th>Nama Santri</th>
+                                    <th>Wilayah</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>No hp</th>
+                                    <th>Total SPP</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for rw in santri %}
+                                  <tr>
+                                    <td><input type="checkbox" name="item[]" id="pilihdata" value="{{rw.id}}"></td>
+                                    <td>{{rw.nama_santri}}</td>
+                                    <td>{{rw.wilayah.nama_wilayah}}</td>
+                                    <td>
+                                        {% if rw.jenis_kelamin == "Laki-laki" %}
+                                        <span class="badge bg-success">Laki-laki</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Perempuan</span>
+                                    {% endif %}
+                                    </td>
+                                    <td>{{rw.no_hp}}</td>
+                                    <td>Rp.{{rw.total|intcomma}}</td>
+                                  </tr>
+                                  {% empty %}
+                                  <tr>
+                                    <td colspan="6" align="center">Data Setting Pembayaran Kosong</td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          
+                          
+                          
+                          
+                          
+                    </div>
+                </div>
+                <div class="col-md-12 col-12 selects-contant-boots">
+                    <div class="card card-statistics">
+                        <div class="card-header">
+                            <div class="card-heading">
+                                <button type="submit" id="simpandata" class="btn btn-primary">SIMPAN</button>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </form>
+    </div>
+    <!-- /.card-body -->
+</section>
+    
+
+  </main><!-- End #main -->
+  <script type="text/javascript" language="javascript">
+    
+
+  
+        // Filter berdasarkan kelas
+      
+        $(document).ready(function() {
+            // Filter Wilayah
+            $('#filterWilayah').change(function() {
+              var selectedWilayah = $(this).val().toLowerCase();
+              $('#setting tbody tr').filter(function() {
+                $(this).toggle($(this).find('td:eq(2)').text().toLowerCase().indexOf(selectedWilayah) > -1)
+              });
+            });
+        
+            // Search
+            $('#search').on('keyup', function() {
+              var value = $(this).val().toLowerCase();
+              $('#setting tbody tr').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
+            });
+          });
+  
+    $(document).ready(function() {
+        $(".checkAll").on("click", function() {
+          $(this)
+            .closest("table")
+            .find("tbody :checkbox")
+            .prop("checked", this.checked)
+            .closest("tr")
+            .toggleClass("selected", this.checked);
+        });
+      
+        $("tbody :checkbox").on("click", function() {
+          // toggle selected class to the checkbox in a row
+          $(this)
+            .closest("tr")
+            .toggleClass("selected", this.checked);
+      
+          // add selected class on check all
+          $(this).closest("table")
+            .find(".checkAll")
+            .prop("checked",
+              $(this)
+                .closest("table")
+                .find("tbody :checkbox:checked").length ==
+                $(this)
+                  .closest("table")
+                  .find("tbody :checkbox").length
+            );
+        });
+      });
+  
+      $('body').on('submit', '#simpansettingpembayaran',function(e) {
+          e.preventDefault();
+          if(confirm('Nama-nama akan di setting pembayaran Bulanan')){
+              var id=[];
+              var csr = $("input[name=csrfmiddlewaretoken]").val();
+              var  bulan =$('#bulan').val();
+              var  tahun =$('#tahun').val();
+              $(':checkbox:checked').each(function(i){
+                id[i]=$(this).val()
+              })
+      
+              var removeItem = 'on';
+              id = jQuery.grep(id, function(value) {
+                return value != removeItem;
+              });
+      
+               if (bulan== "0") {
+              swal({
+                  title: "Perhatikan!!",
+                  text: "Bulan Belum dipilih",
+                  closeModal: false
+              }).then(function() {
+                      swal.close();
+                      $('#bulan').focus();
+              });
+          }else if(tahun == "0"){
+              swal({
+                  title: "Perhatikan!!",
+                  text: "Tahun Belum dipilih",
+                  closeModal: false
+              }).then(function() {
+                      swal.close();
+                      $('#tahun').focus();
+              });
+        
+          }else{
+              if(id.length===0){
+                alert("Silakan pilih santri yang akan di ploting Pembayaran")
+              }else{
+              
+              $('#simpandata').attr('disabled','disabled'); 
+             mydata = {id :id,bulan:bulan,tahun:tahun,csrfmiddlewaretoken: csr};
+                  
+              $.ajax({
+                    type: "POST",
+                    url: "{% url 'simpansettingpembayaran' %}",
+                    data: mydata,
+                    success: function (data) { 
+                        
+                        swal({
+                            title: "Info",
+                            text: "Data Berhasil tersimpan",
+                            icon: "success",
+                            button: "Ok",
+                        });
+                        
+                          $('#simpandata').removeAttr('disabled','disabled'); 
+                           $('form')[0].reset();
+                           $('.checkAll').prop('checked', false);
+                           
+                           $('input[name="item[]"]').each(function() {
+                              this.checked = false;
+                          });
+                           
+                          
+                           $('#bulan').val("0");
+                           $('#tahun').val("0");
+                            
+  
+                         
+                             
+                      
+                    }
+                });
+              }
+      
+          }
+      
+      
+          }
+           
+    });
+</script>
+  {% endblock content %}

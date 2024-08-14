@@ -1,0 +1,108 @@
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      {% for group in user.groups.all  %}
+      {% if group.name == "administrator" %}
+    
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "berandaadmin" %}{% else %}collapsed{% endif %}" href="{% url "berandaadmin" %}">
+          <i class="bi bi-grid"></i>
+          <span>Beranda</span>
+        </a>
+      </li>
+     
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "berandatahunpelajaran" %}{% else %}collapsed{% endif %}" href="{% url "tahunpelajaran" %}">
+          <i class="bi bi-bar-chart-line-fill"></i>
+          <span>Tahun Pelajaran</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "wilayahadmin" %}{% else %}collapsed{% endif %}" href="{% url "wilayah" %}">
+          <i class="bi bi-bricks"></i>
+          <span>Wilayah</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "bendaharaadmin" %}{% else %}collapsed{% endif %}" href="{% url "bendaharaadmin" %}">
+          <i class="bi bi-cash-coin"></i>
+          <span>Bendahara</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "santriadmin" %}{% else %}collapsed{% endif %}" href="{% url "santriadmin" %}">
+          <i class="bi bi-file-person-fill"></i>
+          <span>Santri</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "jenisadmin" %}{% else %}collapsed{% endif %}" href="{% url "jenis" %}">
+          <i class="bi bi-file-spreadsheet-fill"></i>
+          <span>Jenis Pembayaran</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "bankadmin" %}{% else %}collapsed{% endif %}" href="{% url "bank" %}">
+          <i class="bi bi-bank"></i>
+          <span>Bank</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "pembayaranadmin" %}{% else %}collapsed{% endif %}" href="{% url "datapembayaranadmin" %}">
+          <i class="bi bi-folder2-open"></i>
+          <span>Data Pembayaran</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% if group.name == "bendahara" %}
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "bendaharaadmin" %}{% else %}collapsed{% endif %}" href="{% url "berandabendahara" %}">
+          <i class="bi bi-grid"></i>
+          <span>Beranda</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "settingbendahara" %}{% else %}collapsed{% endif %}" href="{% url "setting" %}">
+          <i class="bi bi-tools"></i>
+          <span>Setting Pembayaran</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "datapembayaranabendahara" %}{% else %}collapsed{% endif %}" href="{% url "datapembayaranabendahara" %}">
+          <i class="bi bi-folder2-open"></i>
+          <span>Data Pembayaran</span>
+        </a>
+      </li>
+
+      {% endif %}
+      {% if group.name == "santri" %}
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "santriadmin" %}{% else %}collapsed{% endif %}" href="{% url "berandasantri" %}">
+          <i class="bi bi-grid"></i>
+          <span>Beranda</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if menu == "tagihanpembayaran" %}{% else %}collapsed{% endif %}" href="{% url "tagihanpembayaran" %}">
+          <i class="bi bi-folder2-open"></i>
+          <span>Tagihan Pembayaran</span>
+        </a>
+      </li>
+      
+      {% endif %}
+
+      {% endfor %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url "logout" %}">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>LogOut</span>
+        </a>
+      </li><!-- End Blank Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->

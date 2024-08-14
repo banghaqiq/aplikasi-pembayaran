@@ -1,0 +1,210 @@
+{% extends 'base.html' %} {% load humanize %}{% load static %} {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url "berandaadmin" %}">Beranda</a></li>
+          <li class="breadcrumb-item">Halaman</li>
+          <li class="breadcrumb-item active">{{nama}} : <b>"{{santri.nama_santri}}"</b> </li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    
+<section class="section">
+        <div class="row">
+      <div class="col-12 col-lg-6">
+          <div class="card card-statistics">
+              <div class="card-header">
+                  <div class="card-heading">
+                      <h4 class="card-title">Tambah Jenis Pembayaran</h4>
+                  </div>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive">
+                    <form action="#" id="tambahjenispembayaran" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                            <input type="hidden" value="{{santri.id}}" id="idsantri" name="idsantri" class="form-control" />
+                            <div class="form-group">
+                                <label>Pilih Jenis Pembayaran</label>
+                                <select name="jenis_pembayaran" class="form-control mt-3" id="id_jenis_pembayaran">
+                                  <option value="" selected>--Pilih Jenis Pembayaran--</option>
+                                  {% for row in jenis %}
+                                  <option value="{{row.id}}">{{row.nama_pembayaran}} (Rp. {{row.nominal|intcomma}})</option>
+                                  {% endfor %}
+                              
+                                </select>
+                            </div>
+                           <br/>
+                           
+                            <button type="submit" id="tombolsimpan" class="btn btn-primary">SIMPAN</button>
+                            <a href="{% url 'santriadmin'  %}" class="btn btn-danger">KEMBALI</a>
+                        </form>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-lg-6">
+          <div class="card card-statistics">
+              <div class="card-header">
+                  <div class="card-heading">
+                      <h4 class="card-title">Data Ploting Pembayaran </h4>
+                  </div>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive">
+                      <table class="table mb-0">
+                          <thead>
+                              <tr>
+                                  <th scope="col">No</th>
+                                  <th scope="col">Nama Pembayaran</th>
+                                  <th scope="col">Nomnial</th>
+                                  <th scope="col">Aksi</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tabeldetailnominal">
+                            
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+</main><!-- End #main -->
+<script type="text/javascript" language="javascript">
+    
+    $('body').on('click', '#hapusdetail', function(e) {
+      e.preventDefault();
+      var id = $(this).data("id");
+      var csr = $("input[name=csrfmiddlewaretoken]").val();
+      var mydata = { id: id, csrfmiddlewaretoken: csr };
+  
+      swal({
+          title: "Apakah Anda Yakin?",
+          text: "Data ini akan dihapus secara permanen!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+      }).then((willDelete) => {
+          if (willDelete) {
+              $.ajax({
+                  type: "POST",
+                  url: "{% url 'hapusdetailadmin' %}",
+                  data: mydata,
+                  success: function(data) {
+                      swal("Info! Data telah berhasil dihapus secara permanen", {
+                          icon: "success",
+                      });
+                      tabledetail();
+                  },
+                  error: function(xhr, status, error) {
+                      swal("Error! Gagal menghapus data: " + error, {
+                          icon: "error",
+                      });
+                  }
+              });
+          } else {
+              swal("Data Anda aman, tidak terhapus");
+          }
+      });
+  });
+  
+  
+  tabledetail()
+  function tabledetail(){
+   var csr = $("input[name=csrfmiddlewaretoken]").val();
+   var idsantri = $('#idsantri').val();
+  
+   mydata = {idsantri:idsantri,csrfmiddlewaretoken: csr};
+  $.ajax({
+    url:"{% url 'tabelnominal' %}",
+    method : "POST",
+    async : false,
+     data: mydata,
+    success: function(hasil){
+     
+      $('#tabeldetailnominal').html(hasil).fadeIn().delay(2000);   
+    }
+  });
+  }
+  
+  
+  
+  $("#id_jenis_pembayaran").change(function () {
+  var idjenis = $(this).val();
+  var idsantri = $('#idsantri').val();
+  var csr = $("input[name=csrfmiddlewaretoken]").val();
+  mydata = { idjenis: idjenis,idsantri:idsantri, csrfmiddlewaretoken: csr };
+  $.ajax({
+  type: "GET",
+  url: "{% url 'cekjenispembayaran' %}",
+  data: mydata,
+  dataType: "json",
+  success: function (data) {
+    if (data.is_taken) {
+      swal({
+        title: "Perhatikan!!",
+        text: "Jenis Pembayaran tersebut sudah terploting",
+        closeModal: false,
+      }).then(function () {
+        swal.close();
+        $("#id_jenis_pembayaran").val("");
+      });
+    }
+  },
+  });
+  
+  });
+  
+  $("#tambahjenispembayaran").submit(function (e) {
+  e.preventDefault();
+  var id_jenis_pembayaran = $("#id_jenis_pembayaran").val();
+  if (id_jenis_pembayaran == "") {
+  swal({
+    title: "Perhatikan!!",
+    text: "Jenis Pembayaran Masih Kosong",
+    closeModal: false,
+  }).then(function () {
+    swal.close();
+    $("#id_jenis_pembayaran").focus();
+  });
+  } else {
+  let simpan = confirm("Apakah Anda Yakin Data tersebut akan disimpan?");
+      
+      $("#tombolsimpan").attr("disabled", "disabled");
+      if (simpan) {
+        $.ajax({
+          url: "{% url 'simpanjenisplotingadmin' %}",
+          type: "post",
+          data: new FormData(this),
+          contentType: false,
+          processData: false,
+          success: function (respon) {
+            tabledetail()
+            $("#tombolsimpan").removeAttr("disabled", "disabled");
+            $("#id_jenis_pembayaran").val("");
+            swal("Berhasil", "Data Berhasil tersimpan", "success");
+          },
+          error: function (data) {
+            tabledetail()
+            $("#tombolsimpan").removeAttr("disabled", "disabled");
+            $("#id_jenis_pembayaran").val("");
+            swal("Gagal", "Data Gagal tersimpan", "error");
+          },
+        });
+      } else {
+        alert("Data batal untuk disimpan");
+            tabledetail()
+            $("#tombolsimpan").removeAttr("disabled", "disabled");
+            $("#id_jenis_pembayaran").val("");
+      }
+  }
+  
+  });
+  </script>
+
+
+  {% endblock content %}

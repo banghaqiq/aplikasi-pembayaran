@@ -1,0 +1,85 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url "berandaadmin" %}">Beranda</a></li>
+          {% comment %} <li class="breadcrumb-item">Halaman</li>
+          <li class="breadcrumb-item active">Blank</li> {% endcomment %}
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+       
+        <div class="col-lg-4">
+            <div class="card info-card">
+                <div class="card-body">
+                  <h5 class="card-title"> <span>Jumlah:</span> Santriwan</h5>
+                  <div class="d-flex">
+                    <div class="ps-3">
+                        <h4><strong>{{jmlSantriPa}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card info-card">
+                <div class="card-body">
+                  <h5 class="card-title"> <span>Jumlah:</span> Santriwati</h5>
+                  <div class="d-flex">
+                    <div class="ps-3">
+                      <h4><strong>{{jmlSantriPi}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card info-card">
+                <div class="card-body">
+                  <h5 class="card-title"> <span>Jumlah:</span> Wilayah</h5>
+                  <div class="d-flex">
+                    <div class="ps-3">
+                      <h4><strong>{{jmlWilayah}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card info-card">
+                <div class="card-body">
+                  <h5 class="card-title"> <span>Jumlah:</span> Pembayaran Lunas</h5>
+                  <div class="d-flex">
+                    <div class="ps-3">
+                      <h4><strong>{{jmlbelumbayar}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card info-card">
+                <div class="card-body">
+                  <h5 class="card-title"> <span>Jumlah:</span> Pembayaran Belum Lunas</h5>
+                  <div class="d-flex">
+                    <div class="ps-3">
+                      <h4><strong>{{jmlbayar}}</strong></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  {% endblock content %}

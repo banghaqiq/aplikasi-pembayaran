@@ -1,0 +1,115 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url "berandabendahara" %}">Beranda</a></li>
+          <li class="breadcrumb-item">Halaman</li>
+          <li class="breadcrumb-item active">{{nama}}</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body mt-3">
+                    <!-- Filter Form -->
+                    <form method="GET" action="">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select name="wilayah" class="form-select">
+                                    <option value="">-- Pilih Wilayah --</option>
+                                    {% for wilayah in wilayah_list %}
+                                        <option value="{{ wilayah.id }}" {% if request.GET.wilayah == wilayah.id|stringformat:"s" %}selected{% endif %}>{{ wilayah.nama_wilayah }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="tahun" class="form-select">
+                                    <option value="">-- Pilih Tahun --</option>
+                                    {% for tahun in tahun_list %}
+                                        <option value="{{ tahun }}" {% if request.GET.tahun == tahun|stringformat:"s" %}selected{% endif %}>{{ tahun }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="bulan" class="form-select">
+                                    <option value="">-- Pilih Bulan --</option>
+                                    {% for bulan in bulan_list %}
+                                        <option value="{{ bulan }}" {% if request.GET.bulan == bulan|stringformat:"s" %}selected{% endif %}>{{ bulan }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Cari</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End Filter Form -->
+                    
+                    <!-- Table with stripped rows -->
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Santri</th>
+                                <th>Wilayah</th>
+                                <th>Bulan</th>
+                                <th>Tahun</th>
+                                <th>Total SPP</th>
+                                <th>Status</th>
+                                <th>Bukti</th>
+                                <th>Ubah Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rw in bayar %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ rw.santri.nama_santri }}</td>
+                                    <td>{{ rw.santri.wilayah.nama_wilayah }}</td>
+                                    <td>{{ rw.bulan }}</td>
+                                    <td>{{ rw.tahun }}</td>
+                                    <td>Rp.{{ rw.total|intcomma }}</td>
+                                    <td>
+                                        {% if rw.status == "Lunas" %}
+                                        <span class="badge bg-success">Lunas</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Belum Lunas</span>
+                                    {% endif %}
+                                       
+                                    </td>
+                                    <td>
+                                        {% if rw.file_bukti %}
+                                        <a href="http://{{domain}}{{ rw.file_bukti.url }}" target="_blank">
+                                            <span class="badge bg-primary">
+                                                <i class="bi bi-eye-fill"></i> file
+                                            </span>
+                                        </a>
+                                        
+                                        {% else %}
+                                        <span class="badge bg-danger">No file</span>
+                                        {% endif %}</td>
+                                    <td>
+                                        <a href="{% url "ubahstatusbayar" rw.id %}" class="btn btn-success btn-sm"><i class="bi bi-pencil-fill"></i> Ubah Status</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="9" align="center">Data Pemasangan Status Selesai Kosong</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+  </main><!-- End #main -->
+
+  {% endblock content %}

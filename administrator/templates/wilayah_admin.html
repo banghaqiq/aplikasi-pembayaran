@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url "berandaadmin" %}">Beranda</a></li>
+          <li class="breadcrumb-item">Halaman</li>
+          <li class="breadcrumb-item active">{{nama}}</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="col-lg-12">
+
+            <div class="card">
+              <div class="card-body mt-3">
+
+                <a type="button" href="{% url "formwilayah" %}" class="btn btn-primary"><i class="bi bi-file-earmark-plus-fill me-1"></i> Tambah Data</a>
+  
+                <!-- Table with stripped rows -->
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Wilayah</th>
+                        <th scope="col">Chat ID Telegram</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in data %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{row.nama_wilayah}}</td>
+                      <td>{{row.chat_id}}</td>
+                      <td>
+                        {% if row.aktif == True %} 
+                        <span class="badge bg-success">Aktif</span>
+                        {% else %} 
+                        <span class="badge bg-danger">Tidak Aktif</span>
+                        
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'deletewilayah' row.id %}" class="btn btn-primary btn-sm"><i class="bi bi-trash-fill"></i> Hapus</a>
+                        <a href="{% url 'editwilayah' row.id %}" class="btn btn-danger btn-sm"><i class="bi bi-pencil-fill"></i> Edit</a>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" align="center">Data Wilayah Kosong</td>
+                    </tr>
+                    {% endfor %}
+                   
+                  </tbody>
+                </table>
+                <!-- End Table with stripped rows -->
+  
+              </div>
+            </div>
+  
+
+          </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  {% endblock content %}

@@ -1,0 +1,15 @@
+{% load humanize %}
+{% for row in detail %}
+<tr>
+  <td>{{ forloop.counter }}</td>
+  <td>{{row.jenis_pembayaran.nama_pembayaran}}</td>
+  <td>Rp. {{row.jenis_pembayaran.nominal|intcomma}}</td>
+  <td>
+  <button class="btn btn-danger btn-sm" data-id="{{row.id}}" id="hapusdetail">Hapus</button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="5" align="center">Data jenis Kosong</td>
+</tr>
+{% endfor %}                       

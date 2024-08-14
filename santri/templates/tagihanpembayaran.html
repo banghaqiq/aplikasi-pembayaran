@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %}  {% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+      <h1>{{judul}}</h1>
+      <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url "berandasantri" %}">Beranda</a></li>
+            <li class="breadcrumb-item">Halaman</li>
+            <li class="breadcrumb-item active">{{nama}}</li>
+        
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                       
+                        <th>Bulan</th>
+                        <th>Tahun</th>
+                        <th>Total SPP</th>
+                        <th>Bukti Pembayaran</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    
+                    {% for rw in bayar %}
+                    <tr>
+                            <td>{{ forloop.counter }}</td>
+                           
+                            <td>{{rw.bulan}}</td>
+                              <td>{{rw.tahun}}</td>
+                              <td>Rp.{{rw.total|intcomma}}</td>
+                              <td>
+                                {% if rw.status == "Lunas" %}
+                                    <span class="badge bg-success">Lunas</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Belum Lunas</span>
+                                {% endif %}
+                               </td>
+                               <td>
+                                {% if rw.file_bukti %}
+                                <a href="http://{{domain}}{{ rw.file_bukti.url }}" target="_blank">
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-eye-fill"></i> file
+                                    </span>
+                                </a>
+                                
+                                {% else %}
+                                <span class="badge bg-danger">No file</span>
+                                {% endif %}
+                            </td>
+                            
+                              <td>
+                                {% if rw.status == "Lunas" %}
+                                {% comment %} <a href="{% url "ubahstatusbayar" rw.id %}" class="btn btn-success btn-sm"><i class="bi bi-coin"></i> BAYAR</a> {% endcomment %}
+                                <button class="btn btn-success btn-sm" disabled><i class="bi bi-coin"></i> BAYAR</button>
+                                {% else %}
+
+                                <a href="{% url "buktibayar" rw.id %}" class="btn btn-success btn-sm"><i class="bi bi-coin"></i> BAYAR</a>
+                               
+                                {% endif %} 
+    
+                              
+                            
+                            </td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" align="center">Data Pemasangan Status Selesai Kosong</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+          
+        </div>
+
+
+    </section>
+
+  </main><!-- End #main -->
+
+  {% endblock content %}
